@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:text="@string/download_glide_text"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/download_this_app"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:text="@string/download_this_app_text"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/download_retrofit"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:text="@string/download_retrofit_text"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
     </RadioGroup>
 
     <com.udacity.LoadingButton
@@ -56,7 +56,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        app:layout_constraintVertical_bias="0.120000005" />
+        app:layout_constraintVertical_bias="0.120000005"
+        />
 
     <ImageView
         android:id="@+id/header"
