@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Customs_View_Animation-Project</string>
+    <string name="app_name">LoadApp</string>
     <string name="app_description">Download files from Internet</string>
     <string name="action_settings">Settings</string>
 
@@ -11,4 +11,7 @@
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="download_glide_text">Glide: https://github.com/bumptech/glide</string>
+    <string name="download_this_app_text">This app: https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter</string>
+    <string name="download_retrofit_text">Retrofit: https://github.com/square/retrofit</string>
 </resources>
