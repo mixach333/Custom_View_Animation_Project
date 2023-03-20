@@ -20,8 +20,7 @@
     <string name="download_this_app_text">Load App - Current repository by Udacity</string>
     <string name="download_retrofit_text">Retrofit - type-safe HTTP client for Android and Java by Square, Inc</string>
 
-    <string name="succeeded_to_download">succeeded to download</string>
-    <string name="failed_to_download">failed to download</string>
-    <string name="download_result_message">Your were downloading file from url: %1$s. You %2$s the file: %3$s.</string>
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
 
 </resources>

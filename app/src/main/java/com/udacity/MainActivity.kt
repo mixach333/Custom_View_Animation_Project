@@ -1,25 +1,18 @@
 package com.udacity
 
 import android.app.DownloadManager
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.webkit.URLUtil
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -40,36 +33,36 @@ class MainActivity : AppCompatActivity() {
     private var savedUrl = ""
     private var savedFileName = ""
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         notificationManager.createNotificationChannel(applicationContext)
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
         custom_button.setOnClickListener {
-            val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
             when (radioGroup.checkedRadioButtonId) {
-                -1 -> {
+
+                R.id.download_glide -> {
+                    url = URL_GLIDE
+                    fileName = getString(R.string.download_glide_text)
+                }
+                R.id.download_this_app -> {
+                    url = URL_LOAD_APP
+                    fileName = getString(R.string.download_this_app_text)
+                }
+                R.id.download_retrofit -> {
+                    url = URL_RETROFIT
+                    fileName = getString(R.string.download_retrofit_text)
+                }
+                else -> {
                     Toast.makeText(
                         this,
                         "You have to select at least one field",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                R.id.download_glide -> {
-                    url = URL_GLIDE
-                    fileName = "Glide"
-                }
-                R.id.download_this_app -> {
-                    url = URL_LOAD_APP
-                    fileName = "Load App"
-                }
-                R.id.download_retrofit -> {
-                    url = URL_RETROFIT
-                    fileName = "Retrofit"
-                }
-                else -> Toast.makeText(this, "Wrong url", Toast.LENGTH_SHORT).show()
             }
             if (URLUtil.isValidUrl(url)) download()
             radioGroup.clearCheck()
@@ -141,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$fileName.zip")
 
         downloadID =
-            downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+            downloadManager.enqueue(request)
     }
 
 

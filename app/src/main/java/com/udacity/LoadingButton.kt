@@ -26,13 +26,13 @@ class LoadingButton @JvmOverloads constructor(
     private val buttonPaint = Paint()
     private val circlePaint = Paint()
     private val loadingPaint = Paint()
-    private lateinit var rectF : RectF
+    private lateinit var rectF: RectF
 
 
     private var valueAnimator = ValueAnimator.ofFloat(0f, 1f)
 
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { _, _, new ->
-        when(new){
+        when (new) {
             ButtonState.Clicked -> loadingStarted()
             ButtonState.Loading -> loadingProcessing()
             ButtonState.Completed -> loadingCompleted()
@@ -42,11 +42,18 @@ class LoadingButton @JvmOverloads constructor(
 
     init {
         isClickable = true
-        context.withStyledAttributes(attrs, R.styleable.LoadingButton){
+        context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             textColor = getColor(R.styleable.LoadingButton_textColor, Color.WHITE)
-            loadingColor = getColor(R.styleable.LoadingButton_loadingColor, resources.getColor(R.color.colorPrimaryDark, null))
-            loadingCircleColor = getColor(R.styleable.LoadingButton_loadingCircleColor, Color.YELLOW)
-            buttonBackgroundColor = getColor(R.styleable.LoadingButton_buttonBackgroundColor, resources.getColor(R.color.colorPrimary, null))
+            loadingColor = getColor(
+                R.styleable.LoadingButton_loadingColor,
+                resources.getColor(R.color.colorPrimaryDark, null)
+            )
+            loadingCircleColor =
+                getColor(R.styleable.LoadingButton_loadingCircleColor, Color.YELLOW)
+            buttonBackgroundColor = getColor(
+                R.styleable.LoadingButton_buttonBackgroundColor,
+                resources.getColor(R.color.colorPrimary, null)
+            )
         }
         textPaint.apply {
             textSize = 60f
@@ -57,13 +64,13 @@ class LoadingButton @JvmOverloads constructor(
             color = buttonBackgroundColor
             style = Paint.Style.FILL
         }
-        circlePaint.apply{
+        circlePaint.apply {
             isAntiAlias = true
             color = loadingCircleColor
             style = Paint.Style.FILL
         }
 
-        loadingPaint.apply{
+        loadingPaint.apply {
             isAntiAlias = true
             color = loadingColor
             style = Paint.Style.FILL
@@ -74,7 +81,7 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.let{
+        canvas?.let {
             drawButtonShape(it)
             drawLoadingProgress(it)
             drawButtonText(it)
@@ -97,7 +104,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        rectF = RectF(0f, 0f, (heightSize/2).toFloat(), (heightSize/2).toFloat())
+        rectF = RectF(0f, 0f, (heightSize / 2).toFloat(), (heightSize / 2).toFloat())
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
@@ -116,26 +123,29 @@ class LoadingButton @JvmOverloads constructor(
         )
     }
 
-    private fun drawButtonShape(canvas: Canvas){
+    private fun drawButtonShape(canvas: Canvas) {
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), buttonPaint)
     }
 
-    private fun drawLoadingCircle(canvas: Canvas){
-        canvas.translate((widthSize-widthSize/10).toFloat(),
-            height / 2 - 30f)//TODO: need to be modified to evaluate the size taken by the text
+    private fun drawLoadingCircle(canvas: Canvas) {
+        canvas.translate(
+            (widthSize - widthSize / 10).toFloat(),
+            height / 2 - 30f
+        )//TODO: need to be modified to evaluate the size taken by the text
         canvas.drawArc(
             rectF,
             -90f,
-            loadingProgress*360,
+            loadingProgress * 360,
             true,
-            circlePaint)
+            circlePaint
+        )
     }
 
-    private fun drawLoadingProgress(canvas: Canvas){
-        canvas.drawRect(0f, 0f, width.toFloat()*loadingProgress, height.toFloat(), loadingPaint)
+    private fun drawLoadingProgress(canvas: Canvas) {
+        canvas.drawRect(0f, 0f, width.toFloat() * loadingProgress, height.toFloat(), loadingPaint)
     }
 
-    private fun loadingStarted(){
+    private fun loadingStarted() {
         buttonText = "Loading is in the process"
         loadingProgress = 0f
         isClickable = false
@@ -143,30 +153,26 @@ class LoadingButton @JvmOverloads constructor(
         buttonState = ButtonState.Loading
     }
 
-    private fun loadingProcessing(){
-//        buttonText = "Loading is in the process"
-//        isClickable = false
+    private fun loadingProcessing() {
         valueAnimator.apply {
-            duration = 5000
+            duration = 3000
             addUpdateListener {
                 loadingProgress = it.animatedValue as Float
-                if(loadingProgress==1f){
+                if (loadingProgress == 1f) {
                     loadingProgress = 0f
                     buttonState = ButtonState.Completed
                 }
                 invalidate()
             }
-
             start()
         }
     }
 
-    private fun loadingCompleted(){
+    private fun loadingCompleted() {
         buttonText = "Download"
         loadingProgress = 0f
         valueAnimator.cancel()
         invalidate()
         isClickable = true
     }
-
 }
