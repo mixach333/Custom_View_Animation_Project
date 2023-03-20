@@ -1,15 +1,13 @@
 package com.udacity
 
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.INFINITE
-import android.animation.ValueAnimator.ofFloat
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnRepeat
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
@@ -33,7 +31,7 @@ class LoadingButton @JvmOverloads constructor(
 
     private var valueAnimator = ValueAnimator.ofFloat(0f, 1f)
 
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
+    var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { _, _, new ->
         when(new){
             ButtonState.Clicked -> loadingStarted()
             ButtonState.Loading -> loadingProcessing()
@@ -74,12 +72,15 @@ class LoadingButton @JvmOverloads constructor(
     }
 
 
-    override fun onDraw(canvas: Canvas) {
+    override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        drawButtonShape(canvas)
-        drawLoadingProgress(canvas)
-        drawButtonText(canvas)
-        drawLoadingCircle(canvas)
+        canvas?.let{
+            drawButtonShape(it)
+            drawLoadingProgress(it)
+            drawButtonText(it)
+            drawLoadingCircle(it)
+        }
+
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -143,8 +144,8 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun loadingProcessing(){
-        buttonText = "Loading is in the process"
-        isClickable = false
+//        buttonText = "Loading is in the process"
+//        isClickable = false
         valueAnimator.apply {
             duration = 5000
             addUpdateListener {

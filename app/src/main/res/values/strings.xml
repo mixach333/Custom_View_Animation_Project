@@ -7,11 +7,21 @@
     <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
     <string name="notification_description">The Project 3 repository is downloaded</string>
     <string name="notification_button">See changes</string>
+    <string name="notification_download_status">Download status</string>
+    <string name="notification_channel_id">channelId</string>
+    <string name="notification_channel_name">Downloading notifications</string>
+    <string name="notification_download_success">Successfully downloaded!</string>
+    <string name="notification_download_failed">Download failed!</string>
 
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="download_glide_text">Glide: https://github.com/bumptech/glide</string>
-    <string name="download_this_app_text">This app: https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter</string>
-    <string name="download_retrofit_text">Retrofit: https://github.com/square/retrofit</string>
+    <string name="download_glide_text">Glide - Image Loading library by BumpTech</string>
+    <string name="download_this_app_text">Load App - Current repository by Udacity</string>
+    <string name="download_retrofit_text">Retrofit - type-safe HTTP client for Android and Java by Square, Inc</string>
+
+    <string name="succeeded_to_download">succeeded to download</string>
+    <string name="failed_to_download">failed to download</string>
+    <string name="download_result_message">Your were downloading file from url: %1$s. You %2$s the file: %3$s.</string>
+
 </resources>
