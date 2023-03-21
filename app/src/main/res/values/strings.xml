@@ -22,5 +22,7 @@
 
     <string name="success">Success</string>
     <string name="fail">Fail</string>
+    <string name="download_custom">Download from your custom URL</string>
+    <string name="header_image">Header image</string>
 
 </resources>
