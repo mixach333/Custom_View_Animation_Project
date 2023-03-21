@@ -9,9 +9,9 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
 import android.webkit.URLUtil
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,6 +41,16 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(applicationContext)
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
+        val enterFileNameEditText = findViewById<EditText>(R.id.enter_file_name_edit_text)
+        val enterUrlScrollView = findViewById<ScrollView>(R.id.enter_url_scroll_view)
+        val enterUrlEditText = findViewById<EditText>(R.id.enter_url_edit_text)
+        val customUrlRadioButton = findViewById<RadioButton>(R.id.download_custom_radio_button)
+        customUrlRadioButton.setOnClickListener {
+            if (customUrlRadioButton.isChecked) {
+                enterFileNameEditText.visibility = View.VISIBLE
+                enterUrlScrollView.visibility = View.VISIBLE
+            }
+        }
         custom_button.setOnClickListener {
             when (radioGroup.checkedRadioButtonId) {
 
@@ -56,6 +66,11 @@ class MainActivity : AppCompatActivity() {
                     url = URL_RETROFIT
                     fileName = getString(R.string.download_retrofit_text)
                 }
+                R.id.download_custom_radio_button -> checkCustomFields(
+                    enterFileNameEditText.text.toString(),
+                    enterUrlEditText.text.toString()
+                )
+
                 else -> {
                     Toast.makeText(
                         this,
@@ -64,12 +79,18 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-            if (URLUtil.isValidUrl(url)) download()
-            radioGroup.clearCheck()
-            savedUrl = url
-            savedFileName = fileName
-            url = ""
-            fileName = ""
+            if (URLUtil.isValidUrl(url)) {
+                download()
+                radioGroup.clearCheck()
+                enterFileNameEditText.visibility = View.INVISIBLE
+                enterFileNameEditText.text.clear()
+                enterUrlScrollView.visibility = View.INVISIBLE
+                enterUrlEditText.text.clear()
+                savedUrl = url
+                savedFileName = fileName
+                url = ""
+                fileName = ""
+            }
         }
     }
 
@@ -124,6 +145,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download() {
+        val fileExtensionRegex = Regex("\\.[a-zA-Z0-9]+$")
+        val subPath = if(fileName.contains(fileExtensionRegex)) fileName else "$fileName.zip"
         val request =
             DownloadManager.Request(Uri.parse(url))
                 .setTitle(getString(R.string.app_name))
@@ -131,10 +154,26 @@ class MainActivity : AppCompatActivity() {
                 .setRequiresCharging(false)
                 .setAllowedOverMetered(true)
                 .setAllowedOverRoaming(true)
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$fileName.zip")
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, subPath)
 
         downloadID =
             downloadManager.enqueue(request)
+    }
+
+    private fun checkCustomFields(fileNameToCheck: String, urlToCheck: String) {
+        if (!(fileNameToCheck.length > 4 )) {
+            showShortToast("The size of file name should be at least 5 characters including the file format which ends with dot: \".\", for example \"2.jpg\"")
+            return
+        } else if (!URLUtil.isValidUrl(urlToCheck)) {
+            showShortToast("Your URL is wrong, try again or select another download option")
+            return
+        }
+        fileName = fileNameToCheck
+        url = urlToCheck
+    }
+
+    private fun showShortToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
 

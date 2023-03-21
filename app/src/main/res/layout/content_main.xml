@@ -16,11 +16,10 @@
         android:layout_margin="8dp"
         android:gravity="center_horizontal"
         android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
         <RadioButton
             android:id="@+id/download_glide"
@@ -45,6 +44,14 @@
             android:padding="4dp"
             android:text="@string/download_retrofit_text"
             android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/download_custom_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/download_custom"
+            android:textSize="20sp" />
     </RadioGroup>
 
 
@@ -55,18 +62,57 @@
         android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/enter_file_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/custom_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        app:layout_constraintVertical_bias="0.63" />
+        app:layout_constraintVertical_bias="0.050000012"
+        android:layout_margin="8dp"
+        android:inputType="text"
+        android:maxLength="30"
+        android:visibility="invisible"
+        tools:ignore="Autofill,LabelFor"
+        tools:visibility="visible"
+        android:hint="Enter your file name" />
+
+    <ScrollView
+        android:id="@+id/enter_url_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/custom_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_file_name_edit_text"
+        app:layout_constraintVertical_bias="0.050000012"
+        tools:visibility="visible"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/enter_url_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            tools:ignore="Autofill,LabelFor"
+
+            android:hint="Enter your url"/>
+    </ScrollView>
+
 
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        android:layout_height="140dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_baseline_cloud_download_24"
-        android:background="@color/colorPrimaryDark" />
+        android:contentDescription="@string/header_image"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
