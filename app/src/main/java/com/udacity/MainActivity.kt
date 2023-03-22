@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
                                 applicationContext
                             )
                             custom_button.buttonState = ButtonState.Completed
+
                         }
                         DownloadManager.STATUS_PENDING -> {
                             Toast.makeText(
@@ -145,6 +146,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download() {
+        custom_button.allowAnimation()
         val fileExtensionRegex = Regex("\\.[a-zA-Z0-9]+$")
         val subPath = if(fileName.contains(fileExtensionRegex)) fileName else "$fileName.zip"
         val request =

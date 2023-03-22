@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
@@ -27,6 +28,7 @@ class LoadingButton @JvmOverloads constructor(
     private val circlePaint = Paint()
     private val loadingPaint = Paint()
     private lateinit var rectF: RectF
+    private var isAnimationAllowed = false
 
 
     private var valueAnimator = ValueAnimator.ofFloat(0f, 1f)
@@ -35,7 +37,10 @@ class LoadingButton @JvmOverloads constructor(
         when (new) {
             ButtonState.Clicked -> loadingStarted()
             ButtonState.Loading -> loadingProcessing()
-            ButtonState.Completed -> loadingCompleted()
+            ButtonState.Completed -> {
+                isAnimationAllowed = false
+                loadingCompleted()
+            }
         }
     }
 
@@ -110,7 +115,7 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         super.performClick()
-        if (buttonState == ButtonState.Completed) buttonState = ButtonState.Clicked
+        if (buttonState == ButtonState.Completed && isAnimationAllowed) buttonState = ButtonState.Clicked
         return true
     }
 
@@ -154,18 +159,23 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun loadingProcessing() {
-        valueAnimator.apply {
-            duration = 3000
-            addUpdateListener {
-                loadingProgress = it.animatedValue as Float
-                if (loadingProgress == 1f) {
-                    loadingProgress = 0f
-                    buttonState = ButtonState.Completed
+            valueAnimator.apply {
+                duration = 1000
+                addUpdateListener {
+                    loadingProgress = it.animatedValue as Float
+                    if (loadingProgress == 1f) {
+                        loadingProgress = 0f
+                    }
+                    invalidate()
                 }
-                invalidate()
+                start()
+                doOnEnd {
+                    if(isAnimationAllowed){
+                        it.start()
+                    }
+                }
             }
-            start()
-        }
+
     }
 
     private fun loadingCompleted() {
@@ -174,5 +184,9 @@ class LoadingButton @JvmOverloads constructor(
         valueAnimator.cancel()
         invalidate()
         isClickable = true
+    }
+
+    fun allowAnimation() {
+        isAnimationAllowed = true
     }
 }
