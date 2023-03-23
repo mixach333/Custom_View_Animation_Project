@@ -5,5 +5,6 @@
         <attr name="loadingColor" format="color"/>
         <attr name="loadingCircleColor" format="color"/>
         <attr name="buttonBackgroundColor" format="color"/>
+        <attr name="animationDurationMillis" format="integer"/>
     </declare-styleable>
 </resources>

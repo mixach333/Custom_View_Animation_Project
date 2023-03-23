@@ -24,5 +24,12 @@
     <string name="fail">Fail</string>
     <string name="download_custom">Download from your custom URL</string>
     <string name="header_image">Header image</string>
+    <string name="download">Download</string>
+    <string name="loading_in_process">Loading is in the process</string>
+    <string name="nothing_selected_radio_group">You have to select at least one field</string>
+    <string name="the_loading_is_pending">The loading is pending</string>
+    <string name="loading_is_paused">The loading is paused</string>
+    <string name="wrong_url_toast">Your URL is wrong, try again or select another download option</string>
+    <string name="wrong_file_name_toast">The length of file name should be at least 5 characters including the file format which ends with dot: \".\", for example \"2.jpg\"</string>
 
 </resources>

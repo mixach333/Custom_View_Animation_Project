@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         val enterUrlScrollView = findViewById<ScrollView>(R.id.enter_url_scroll_view)
         val enterUrlEditText = findViewById<EditText>(R.id.enter_url_edit_text)
         val customUrlRadioButton = findViewById<RadioButton>(R.id.download_custom_radio_button)
+
         customUrlRadioButton.setOnClickListener {
             if (customUrlRadioButton.isChecked) {
                 enterFileNameEditText.visibility = View.VISIBLE
@@ -71,28 +72,23 @@ class MainActivity : AppCompatActivity() {
                     enterUrlEditText.text.toString()
                 )
 
-                else -> {
-                    Toast.makeText(
-                        this,
-                        "You have to select at least one field",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                else -> showShortToast(getString(R.string.nothing_selected_radio_group))
+                }
+                if (URLUtil.isValidUrl(url)) {
+                    download()
+                    radioGroup.clearCheck()
+                    enterFileNameEditText.visibility = View.INVISIBLE
+                    enterFileNameEditText.text.clear()
+                    enterUrlScrollView.visibility = View.INVISIBLE
+                    enterUrlEditText.text.clear()
+                    savedUrl = url
+                    savedFileName = fileName
+                    url = ""
+                    fileName = ""
                 }
             }
-            if (URLUtil.isValidUrl(url)) {
-                download()
-                radioGroup.clearCheck()
-                enterFileNameEditText.visibility = View.INVISIBLE
-                enterFileNameEditText.text.clear()
-                enterUrlScrollView.visibility = View.INVISIBLE
-                enterUrlEditText.text.clear()
-                savedUrl = url
-                savedFileName = fileName
-                url = ""
-                fileName = ""
-            }
         }
-    }
+
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -113,7 +109,6 @@ class MainActivity : AppCompatActivity() {
                                 applicationContext
                             )
                             custom_button.buttonState = ButtonState.Completed
-
                         }
                         DownloadManager.STATUS_FAILED -> {
                             notificationManager.sendNotification(
@@ -125,20 +120,8 @@ class MainActivity : AppCompatActivity() {
                             custom_button.buttonState = ButtonState.Completed
 
                         }
-                        DownloadManager.STATUS_PENDING -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "The loading is pending",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        DownloadManager.STATUS_PAUSED -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "The loading is paused",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        DownloadManager.STATUS_PENDING -> showShortToast(getString(R.string.the_loading_is_pending))
+                        DownloadManager.STATUS_PAUSED -> showShortToast(getString(R.string.loading_is_paused))
                     }
                 }
             }
@@ -163,11 +146,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkCustomFields(fileNameToCheck: String, urlToCheck: String) {
-        if (!(fileNameToCheck.length > 4 )) {
-            showShortToast("The size of file name should be at least 5 characters including the file format which ends with dot: \".\", for example \"2.jpg\"")
+        if (fileNameToCheck.length <= 4 ) {
+            showShortToast(getString(R.string.wrong_file_name_toast))
             return
         } else if (!URLUtil.isValidUrl(urlToCheck)) {
-            showShortToast("Your URL is wrong, try again or select another download option")
+            showShortToast(getString(R.string.wrong_url_toast))
             return
         }
         fileName = fileNameToCheck
@@ -178,7 +161,6 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
-
     companion object {
         private const val URL_LOAD_APP =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
@@ -188,5 +170,4 @@ class MainActivity : AppCompatActivity() {
             "https://github.com/square/retrofit/archive/master.zip"
 
     }
-
 }

@@ -62,7 +62,8 @@
         android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:animationDurationMillis="800"/>
 
     <EditText
         android:id="@+id/enter_file_name_edit_text"

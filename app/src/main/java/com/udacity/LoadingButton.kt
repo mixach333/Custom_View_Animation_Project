@@ -17,7 +17,7 @@ class LoadingButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     private var widthSize = 0
     private var heightSize = 0
-    private var buttonText = "Download"
+    private var buttonText = context.getString(R.string.download)
     private var loadingProgress = 0f
     private var textColor = 0
     private var loadingColor = 0
@@ -29,6 +29,7 @@ class LoadingButton @JvmOverloads constructor(
     private val loadingPaint = Paint()
     private lateinit var rectF: RectF
     private var isAnimationAllowed = false
+    private var animationDurationMillis: Int = 1000
 
 
     private var valueAnimator = ValueAnimator.ofFloat(0f, 1f)
@@ -38,7 +39,7 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Clicked -> loadingStarted()
             ButtonState.Loading -> loadingProcessing()
             ButtonState.Completed -> {
-                isAnimationAllowed = false
+                //isAnimationAllowed = false
                 loadingCompleted()
             }
         }
@@ -59,6 +60,8 @@ class LoadingButton @JvmOverloads constructor(
                 R.styleable.LoadingButton_buttonBackgroundColor,
                 resources.getColor(R.color.colorPrimary, null)
             )
+            animationDurationMillis =
+                getInteger(R.styleable.LoadingButton_animationDurationMillis, 1000)
         }
         textPaint.apply {
             textSize = 60f
@@ -80,9 +83,7 @@ class LoadingButton @JvmOverloads constructor(
             color = loadingColor
             style = Paint.Style.FILL
         }
-
     }
-
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -92,12 +93,11 @@ class LoadingButton @JvmOverloads constructor(
             drawButtonText(it)
             drawLoadingCircle(it)
         }
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val minw: Int = paddingLeft + paddingRight + suggestedMinimumWidth
-        val w: Int = resolveSizeAndState(minw, widthMeasureSpec, 1)
+        val minW: Int = paddingLeft + paddingRight + suggestedMinimumWidth
+        val w: Int = resolveSizeAndState(minW, widthMeasureSpec, 1)
         val h: Int = resolveSizeAndState(
             MeasureSpec.getSize(w),
             heightMeasureSpec,
@@ -115,7 +115,8 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         super.performClick()
-        if (buttonState == ButtonState.Completed && isAnimationAllowed) buttonState = ButtonState.Clicked
+        if (buttonState == ButtonState.Completed && isAnimationAllowed) buttonState =
+            ButtonState.Clicked
         return true
     }
 
@@ -136,7 +137,7 @@ class LoadingButton @JvmOverloads constructor(
         canvas.translate(
             (widthSize - widthSize / 10).toFloat(),
             height / 2 - 30f
-        )//TODO: need to be modified to evaluate the size taken by the text
+        )
         canvas.drawArc(
             rectF,
             -90f,
@@ -151,7 +152,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun loadingStarted() {
-        buttonText = "Loading is in the process"
+        buttonText = context.getString(R.string.loading_in_process)
         loadingProgress = 0f
         isClickable = false
         invalidate()
@@ -159,27 +160,29 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun loadingProcessing() {
-            valueAnimator.apply {
-                duration = 1000
-                addUpdateListener {
-                    loadingProgress = it.animatedValue as Float
-                    if (loadingProgress == 1f) {
-                        loadingProgress = 0f
-                    }
-                    invalidate()
+        valueAnimator.apply {
+            duration = animationDurationMillis.toLong()
+            addUpdateListener {
+                loadingProgress = it.animatedValue as Float
+                if (loadingProgress == 1f) {
+                    loadingProgress = 0f
                 }
-                start()
-                doOnEnd {
-                    if(isAnimationAllowed){
-                        it.start()
-                    }
+                invalidate()
+            }
+            start()
+            // allows the animation to be repeated while download progress is not completed
+            doOnEnd {
+                if (isAnimationAllowed) {
+                    it.start()
                 }
             }
+        }
 
     }
 
     private fun loadingCompleted() {
-        buttonText = "Download"
+        isAnimationAllowed = false
+        buttonText = context.getString(R.string.download)
         loadingProgress = 0f
         valueAnimator.cancel()
         invalidate()
