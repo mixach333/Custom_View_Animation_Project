@@ -1,9 +1,9 @@
 ### Android App with Loading Status
 
-This Android application allows you to download a file from the Internet using a custom button with loading status, and notifies you when the download is complete.
+This Android application allows you to download a file from the Internet using a custom button with loading animation, which continues as long as download proces continues, and notifies you when the download is complete.
 You can also choose which file to download from a list of options or by entering a custom URL.
 
-Please note that this is a sample project to demonstrate the implementation of a custom view, without using architecture approaches such as MVVM, Clean Architecture, SOLID, etc. If you want to see an implementation of Clean Architecture, you can check out other Udacity projects such as the AsteroidRadar or ShoeStore projects.
+Please note that this is a sample project to demonstrate the implementation of a custom view, without using architecture approaches such as MVVM, Clean Architecture, SOLID, etc. You can check out other projects such as the AsteroidRadar or ShoeStore projects.
 
 
 ## Usage
