@@ -19,5 +19,5 @@ If you would like to contribute to this project, feel free to fork the repositor
 ## Credits
 This app was created as a project for the Udacity Kotlin Android course. The following libraries were used in the project:
 
-*Glide: https://github.com/bumptech/glide
-*Retrofit: https://github.com/square/retrofit
+* Glide: https://github.com/bumptech/glide
+* Retrofit: https://github.com/square/retrofit
